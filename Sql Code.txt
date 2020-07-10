@@ -1,0 +1,48 @@
+Q1: List the USA cities where purchases were made and the number of these operations.
+
+select BillingCountry, count(InvoiceId) As NumOfInvoices , Customer.City
+ from Invoice
+ join Customer on Invoice.CustomerId=Customer.CustomerId
+ where BillingCountry = "USA"
+ GROUP BY  Customer.City 
+ order by count(InvoiceId) DESC
+----------------------------------------------------------------------------------
+Q2: List the best customers in America according to purchases.
+
+select Customer.FirstName, Customer.LastName, sum(Invoice.total) AS Total
+from Customer
+INNER JOIN Invoice ON Customer.CustomerId=Invoice.CustomerId
+where Customer.Country="USA"
+GROUP BY Customer.CustomerId 
+ORDER BY sum(Invoice.total) DESC;
+
+
+-------------------------------------------------------------------------------------
+Q3: List by genres most used song in Chicago
+
+select Genre.Name,Genre.GenreId
+from Customer 
+INNER  JOIN Invoice ON Customer.CustomerId = Invoice.CustomerId
+INNER  JOIN InvoiceLine ON Invoice.InvoiceId=InvoiceLine.InvoiceId
+INNER  JOIN Track ON InvoiceLine.TrackId=Track.TrackId
+INNER  JOIN Genre ON Genre.GenreId=Track.GenreId
+Where  Customer.City="Chicago"
+GROUP By Genre.Name
+ORDER By Genre.GenreId  DESC
+
+------------------------------------------------------------------------------------
+Q4: Who is writing the rock music?
+
+select  Artist.Name , count(Track.TrackId) As Songs
+from Artist 
+INNER  JOIN Album ON Artist.ArtistId = Album.ArtistId
+INNER  JOIN Track ON Track.AlbumId=Album.AlbumId
+INNER  JOIN Genre ON Genre.GenreId=Track.GenreId
+where Genre.GenreId=1
+GROUP By Artist.ArtistId
+ORDER BY count(Track.TrackId) DESC
+LIMIT 10
+
+
+
+
